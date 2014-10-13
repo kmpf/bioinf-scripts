@@ -1,0 +1,26 @@
+library(ggplot2)
+
+create.barplot <- function(data, plot_filename) {
+  g <- ggplot(data, aes(x = reorder(Sample, -Counts), y = Counts))
+#  g <- ggplot(data, aes(x = Sample, y = Counts)) 
+  g <- g + geom_bar(stat="identity")
+  g <- g + theme_bw(base_size=10)
+#  plot.filename <- gsub("pdf$", "hist.pdf", pdf.filename)
+  ggsave(plot_filename, plot=g, width=150, height=75, units="mm")
+}
+
+data <- read.csv("mapped_reads_per_sample.txt", sep=",", fill=TRUE, header=FALSE)
+colnames(data) <- c("Sample", "Counts")
+data <- data[order(-data[, 2]), ]
+create.barplot(data, "Counts_per_sample_bar.png")
+
+data <- read.csv("mapped_reads_per_naive_sample.txt", sep=",", fill=TRUE, header=FALSE)
+colnames(data) <- c("Sample", "Counts")
+data <- data[order(-data[, 2]), ]
+create.barplot(data, "Counts_per_naive_sample_bar.png")
+
+data <- read.csv("mapped_reads_per_24h_sample.txt", sep=",", fill=TRUE, header=FALSE)
+colnames(data) <- c("Sample", "Counts")
+data <- data[order(-data[, 2]), ]
+create.barplot(data, "Counts_per_24h_sample_bar.png")
+
